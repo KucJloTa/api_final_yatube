@@ -25,7 +25,8 @@ class TestPostAPI:
 
         test_data = response.json()
 
-        assert type(test_data) == list, 'Проверьте, что при GET запросе на `/api/v1/posts/` возвращается список'
+        assert isinstance(
+            test_data, list), 'Проверьте, что при GET запросе на `/api/v1/posts/` возвращается список'
 
         assert len(test_data) == Post.objects.count(), \
             'Проверьте, что при GET запросе на `/api/v1/posts/` возвращается весь список статей'
@@ -61,7 +62,7 @@ class TestPostAPI:
         test_data = response.json()
 
         msg_error = 'Проверьте, что при POST запросе на `/api/v1/posts/` возвращается словарь с данными новой статьи'
-        assert type(test_data) == dict, msg_error
+        assert isinstance(test_data, dict), msg_error
         assert test_data.get('text') == data['text'], msg_error
 
         assert test_data.get('author') == user.username, \

@@ -24,7 +24,8 @@ class TestFollowAPI:
 
         test_data = response.json()
 
-        assert type(test_data) == list, 'Проверьте, что при GET запросе на `/api/v1/follow/` возвращается список'
+        assert isinstance(
+            test_data, list), 'Проверьте, что при GET запросе на `/api/v1/follow/` возвращается список'
 
         assert len(test_data) == Follow.objects.count(), \
             'Проверьте, что при GET запросе на `/api/v1/follow/` возвращается весь список подписок'
@@ -44,7 +45,8 @@ class TestFollowAPI:
             'в поле `following` должен быть `username`'
 
     @pytest.mark.django_db(transaction=True)
-    def test_follow_create(self, user_client, follow_2, follow_3, user, user_2, another_user):
+    def test_follow_create(self, user_client, follow_2,
+                           follow_3, user, user_2, another_user):
         follow_count = Follow.objects.count()
 
         data = {}
@@ -60,7 +62,7 @@ class TestFollowAPI:
         test_data = response.json()
 
         msg_error = 'Проверьте, что при POST запросе на `/api/v1/follow/` возвращается словарь с данными новой подписки'
-        assert type(test_data) == dict, msg_error
+        assert isinstance(test_data, dict), msg_error
         assert test_data.get('user') == user.username, msg_error
         assert test_data.get('following') == data['following'], msg_error
 

@@ -18,6 +18,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'author', 'post', 'text', 'created')
         model = Comment
 
+
 class GroupSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source='author.username')
 
@@ -25,9 +26,15 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ('title', 'author', 'id')
         model = Group
 
+
 class FollowSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(slug_field='username', read_only=True, default=serializers.CurrentUserDefault() )
-    following = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    user = serializers.SlugRelatedField(
+        slug_field='username',
+        read_only=True,
+        default=serializers.CurrentUserDefault())
+    following = serializers.SlugRelatedField(
+        slug_field='username', queryset=User.objects.all())
+
     class Meta:
         fields = ('user', 'following')
         model = Follow

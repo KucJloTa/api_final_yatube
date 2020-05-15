@@ -17,14 +17,16 @@ class TestGroupAPI:
             'Проверьте, что `/api/v1/group/` при запросе без токена возвращаете статус 200'
 
     @pytest.mark.django_db(transaction=True)
-    def test_group_get(self, user_client, post, another_post, group_1, group_2):
+    def test_group_get(self, user_client, post,
+                       another_post, group_1, group_2):
         response = user_client.get('/api/v1/group/')
         assert response.status_code == 200, \
             'Проверьте, что при GET запросе `/api/v1/group/` с токеном авторизации возвращаетсся статус 200'
 
         test_data = response.json()
 
-        assert type(test_data) == list, 'Проверьте, что при GET запросе на `/api/v1/group/` возвращается список'
+        assert isinstance(
+            test_data, list), 'Проверьте, что при GET запросе на `/api/v1/group/` возвращается список'
 
         assert len(test_data) == Group.objects.count(), \
             'Проверьте, что при GET запросе на `/api/v1/group/` возвращается весь список групп'
@@ -55,14 +57,15 @@ class TestGroupAPI:
         test_data = response.json()
 
         msg_error = 'Проверьте, что при POST запросе на `/api/v1/group/` возвращается словарь с данными новой группы'
-        assert type(test_data) == dict, msg_error
+        assert isinstance(test_data, dict), msg_error
         assert test_data.get('title') == data['title'], msg_error
 
         assert group_count + 1 == Group.objects.count(), \
             'Проверьте, что при POST запросе на `/api/v1/group/` создается группа'
 
     @pytest.mark.django_db(transaction=True)
-    def test_group_get_post(self, user_client, post, post_2, another_post, group_1, group_2):
+    def test_group_get_post(self, user_client, post,
+                            post_2, another_post, group_1, group_2):
         response = user_client.get(f'/api/v1/posts/')
         assert response.status_code == 200, \
             'Страница `/api/v1/posts/` не найдена, проверьте этот адрес в *urls.py*'
